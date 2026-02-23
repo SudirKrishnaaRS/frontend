@@ -3,12 +3,16 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "./Loader";
+import { useWalletStore } from "@/store/walletStore";
 
 export default function WalletForm() {
   const [accountNumber, setAccountNumber] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
   const [nickname, setNickname] = useState("");
   const [loading, setLoading] = useState(false);
+
+  // Zustand Store
+  const setWalletData = useWalletStore((state) => state.setWalletData);
 
   const router = useRouter();
 
@@ -41,9 +45,14 @@ export default function WalletForm() {
 
       console.log("first API response:", data);
 
-      router.push(
-        `/success?nickname=${data.nickname}&masked=${data.maskedAccount}`
-      );
+      // Approach 1: To Pass the API response via Query Params
+      // router.push(
+      //   `/success?nickname=${data.nickname}&masked=${data.maskedAccount}`
+      // );
+
+      // Approach 2: Set the API response in the Zustand Store
+      setWalletData(data.nickname, data.maskedAccount);
+      router.push("/success");
     } catch (error) {
       alert("Failed to save wallet");
     } finally {
@@ -55,12 +64,12 @@ export default function WalletForm() {
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg space-y-4 w-96">
-      <h1 className="text-xl font-bold">Save Wallet</h1>
+      <h1 className="text-xl font-bold text-gray-900">Save Wallet</h1>
 
       <input
         placeholder="Account Number"
         type="number"
-        className="border p-2 w-full rounded"
+        className="border p-2 w-full rounded text-gray-900"
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
       />
@@ -68,14 +77,14 @@ export default function WalletForm() {
       <input
         placeholder="Routing Number (10 digits)"
         type="number"
-        className="border p-2 w-full rounded"
+        className="border p-2 w-full rounded text-gray-900"
         value={routingNumber}
         onChange={(e) => setRoutingNumber(e.target.value)}
       />
 
       <input
         placeholder="Account Nickname"
-        className="border p-2 w-full rounded"
+        className="border p-2 w-full rounded text-gray-900"
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
       />
@@ -83,6 +92,7 @@ export default function WalletForm() {
       <button
         onClick={handleSubmit}
         className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+        disabled={loading}
       >
         Save Wallet
       </button>
