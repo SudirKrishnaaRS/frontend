@@ -8,7 +8,7 @@ import { useCMSContent } from "@/hooks/useCMSContent";
 import { WalletLabels } from "@/types/wallet";
 
 export default function WalletForm() {
-  // To fetch the labels from Strapi CMS
+  // Custom Hook:  To fetch the labels from Strapi CMS
   const {
     data: labels,
     loading: CMSLoading,
@@ -26,17 +26,8 @@ export default function WalletForm() {
 
   const router = useRouter();
 
-  console.log("first CMS Lables:", labels);
-
   const handleSubmit = async () => {
     setLoading(true);
-
-    console.log(
-      "first initial payload:",
-      accountNumber,
-      routingNumber,
-      nickname
-    );
 
     try {
       const res = await fetch(
@@ -58,8 +49,6 @@ export default function WalletForm() {
 
       const data = await res.json();
 
-      console.log("first API response:", data);
-
       //  Set the API response in the Zustand Store
       setWalletData(data.nickname, data.maskedAccount);
       router.push("/success");
@@ -71,57 +60,68 @@ export default function WalletForm() {
     }
   };
 
-  if (loading || CMSLoading) return <Loader />;
+  if (CMSLoading || loading)
+    return (
+      <Loader
+        loaderContent={CMSLoading ? "loading..." : "Saving to wallet..."}
+      />
+    );
 
   return (
-    <div className="p-6 bg-white shadow-md rounded-lg space-y-4 w-96">
+    <section className="p-6 bg-white shadow-md rounded-lg space-y-4 w-96">
       <h1 className="text-xl font-bold text-gray-900">{labels?.title}</h1>
 
       <p className="text-gray-900">{labels?.body}</p>
 
-      <label htmlFor="accountNumber" className="text-gray-900 text-l">
-        {labels?.accountLabel}
-      </label>
-      <input
-        placeholder=" enter account Number"
-        id="accountNumber"
-        type="number"
-        value={accountNumber}
-        onChange={(e) => setAccountNumber(e.target.value)}
-        className="border p-2 w-full rounded text-gray-900"
-      />
+      <div>
+        <label htmlFor="accountNumber" className="text-gray-900 text-l">
+          {labels?.accountLabel}
+        </label>
+        <input
+          placeholder=" enter account Number"
+          id="accountNumber"
+          type="number"
+          value={accountNumber}
+          onChange={(e) => setAccountNumber(e.target.value)}
+          className="border p-2 w-full rounded text-gray-900"
+        />
+      </div>
 
-      <label htmlFor="routingNumber" className="text-gray-900 text-l">
-        {labels?.routingLabel}
-      </label>
-      <input
-        placeholder="enter routing number"
-        id="routingNumber"
-        type="number"
-        value={routingNumber}
-        onChange={(e) => setRoutingNumber(e.target.value)}
-        className="border p-2 w-full rounded text-gray-900"
-      />
+      <div>
+        <label htmlFor="routingNumber" className="text-gray-900 text-l">
+          {labels?.routingLabel}
+        </label>
+        <input
+          placeholder="enter routing number"
+          id="routingNumber"
+          type="number"
+          value={routingNumber}
+          onChange={(e) => setRoutingNumber(e.target.value)}
+          className="border p-2 w-full rounded text-gray-900"
+        />
+      </div>
 
-      <label htmlFor="accountNickname" className="text-gray-900 text-l">
-        {labels?.nicknameLabel}
-      </label>
-      <input
-        placeholder="enter account Nickname"
-        id="accountNickname"
-        type="text"
-        value={nickname}
-        onChange={(e) => setNickname(e.target.value)}
-        className="border p-2 w-full rounded text-gray-900"
-      />
+      <div>
+        <label htmlFor="accountNickname" className="text-gray-900 text-l">
+          {labels?.nicknameLabel}
+        </label>
+        <input
+          placeholder="enter account Nickname"
+          id="accountNickname"
+          type="text"
+          value={nickname}
+          onChange={(e) => setNickname(e.target.value)}
+          className="border p-2 w-full rounded text-gray-900"
+        />
+      </div>
 
       <button
         onClick={handleSubmit}
-        className="bg-blue-600 text-white px-4 py-2 rounded w-full"
+        className="bg-blue-600 text-white px-4 py-2 rounded-xl w-full"
         disabled={loading}
       >
         {labels?.submitButton}
       </button>
-    </div>
+    </section>
   );
 }
