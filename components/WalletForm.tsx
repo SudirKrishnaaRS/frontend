@@ -45,12 +45,7 @@ export default function WalletForm() {
 
       console.log("first API response:", data);
 
-      // Approach 1: To Pass the API response via Query Params
-      // router.push(
-      //   `/success?nickname=${data.nickname}&masked=${data.maskedAccount}`
-      // );
-
-      // Approach 2: Set the API response in the Zustand Store
+      //  Set the API response in the Zustand Store
       setWalletData(data.nickname, data.maskedAccount);
       router.push("/success");
     } catch (error) {
