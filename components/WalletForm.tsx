@@ -4,10 +4,16 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "./Loader";
 import { useWalletStore } from "@/store/walletStore";
+import { useCMSContent } from "@/hooks/useCMSContent";
+import { WalletLabels } from "@/types/wallet";
 
 export default function WalletForm() {
-  // For Strapi CMS
-  const [labels, setLabels] = useState<any>(null);
+  // To fetch the labels from Strapi CMS
+  const {
+    data: labels,
+    loading: CMSLoading,
+    error,
+  } = useCMSContent<WalletLabels>("/api/wallet-labels");
 
   const [accountNumber, setAccountNumber] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
@@ -19,18 +25,6 @@ export default function WalletForm() {
   const setError = useWalletStore((state) => state.setError);
 
   const router = useRouter();
-
-  // To fetch the labels from Strapi CMS
-  useEffect(() => {
-    const fetchLabels = async () => {
-      const res = await fetch("http://localhost:1337/api/wallet-labels");
-      const data = await res.json();
-      console.log("first starpi CMS:", data);
-      setLabels(data.data[0]);
-    };
-
-    fetchLabels();
-  }, []);
 
   console.log("first CMS Lables:", labels);
 
@@ -45,17 +39,20 @@ export default function WalletForm() {
     );
 
     try {
-      const res = await fetch("http://localhost:5000/api/wallet/save", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          accountNumber,
-          routingNumber,
-          nickname,
-        }),
-      });
+      const res = await fetch(
+        `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/save`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            accountNumber,
+            routingNumber,
+            nickname,
+          }),
+        }
+      );
 
       if (!res.ok) throw new Error("API error");
 
@@ -74,7 +71,7 @@ export default function WalletForm() {
     }
   };
 
-  if (loading) return <Loader />;
+  if (loading || CMSLoading) return <Loader />;
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg space-y-4 w-96">
