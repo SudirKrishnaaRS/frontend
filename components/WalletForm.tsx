@@ -13,6 +13,7 @@ export default function WalletForm() {
 
   // Zustand Store
   const setWalletData = useWalletStore((state) => state.setWalletData);
+  const setError = useWalletStore((state) => state.setError);
 
   const router = useRouter();
 
@@ -49,7 +50,8 @@ export default function WalletForm() {
       setWalletData(data.nickname, data.maskedAccount);
       router.push("/success");
     } catch (error) {
-      alert("Failed to save wallet");
+      setError("Failed to save wallet. Please try again.");
+      router.push("/error");
     } finally {
       setLoading(false);
     }
