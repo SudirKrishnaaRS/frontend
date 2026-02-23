@@ -1,11 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Loader from "./Loader";
 import { useWalletStore } from "@/store/walletStore";
 
 export default function WalletForm() {
+  // For Strapi CMS
+  const [labels, setLabels] = useState<any>(null);
+
   const [accountNumber, setAccountNumber] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
   const [nickname, setNickname] = useState("");
@@ -16,6 +19,20 @@ export default function WalletForm() {
   const setError = useWalletStore((state) => state.setError);
 
   const router = useRouter();
+
+  // To fetch the labels from Strapi CMS
+  useEffect(() => {
+    const fetchLabels = async () => {
+      const res = await fetch("http://localhost:1337/api/wallet-labels");
+      const data = await res.json();
+      console.log("first starpi CMS:", data);
+      setLabels(data.data[0]);
+    };
+
+    fetchLabels();
+  }, []);
+
+  console.log("first CMS Lables:", labels);
 
   const handleSubmit = async () => {
     setLoading(true);
@@ -61,29 +78,44 @@ export default function WalletForm() {
 
   return (
     <div className="p-6 bg-white shadow-md rounded-lg space-y-4 w-96">
-      <h1 className="text-xl font-bold text-gray-900">Save Wallet</h1>
+      <h1 className="text-xl font-bold text-gray-900">{labels?.title}</h1>
 
+      <p className="text-gray-900">{labels?.body}</p>
+
+      <label htmlFor="accountNumber" className="text-gray-900 text-l">
+        {labels?.accountLabel}
+      </label>
       <input
-        placeholder="Account Number"
+        placeholder=" enter account Number"
+        id="accountNumber"
         type="number"
-        className="border p-2 w-full rounded text-gray-900"
         value={accountNumber}
         onChange={(e) => setAccountNumber(e.target.value)}
+        className="border p-2 w-full rounded text-gray-900"
       />
 
+      <label htmlFor="routingNumber" className="text-gray-900 text-l">
+        {labels?.routingLabel}
+      </label>
       <input
-        placeholder="Routing Number (10 digits)"
+        placeholder="enter routing number"
+        id="routingNumber"
         type="number"
-        className="border p-2 w-full rounded text-gray-900"
         value={routingNumber}
         onChange={(e) => setRoutingNumber(e.target.value)}
+        className="border p-2 w-full rounded text-gray-900"
       />
 
+      <label htmlFor="accountNickname" className="text-gray-900 text-l">
+        {labels?.nicknameLabel}
+      </label>
       <input
-        placeholder="Account Nickname"
-        className="border p-2 w-full rounded text-gray-900"
+        placeholder="enter account Nickname"
+        id="accountNickname"
+        type="text"
         value={nickname}
         onChange={(e) => setNickname(e.target.value)}
+        className="border p-2 w-full rounded text-gray-900"
       />
 
       <button
@@ -91,7 +123,7 @@ export default function WalletForm() {
         className="bg-blue-600 text-white px-4 py-2 rounded w-full"
         disabled={loading}
       >
-        Save Wallet
+        {labels?.submitButton}
       </button>
     </div>
   );
