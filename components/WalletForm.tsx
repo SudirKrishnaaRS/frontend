@@ -18,6 +18,12 @@ export default function WalletForm() {
   const [accountNumber, setAccountNumber] = useState("");
   const [routingNumber, setRoutingNumber] = useState("");
   const [nickname, setNickname] = useState("");
+  const [accountType, setAccountType] = useState("savings");
+  const [acceptedTerms, setAcceptedTerms] = useState(
+    labels?.termsAndConditionsCheckbox
+  );
+  const [showModal, setShowModal] = useState(false);
+
   const [loading, setLoading] = useState(false);
 
   // Zustand Store
@@ -27,6 +33,11 @@ export default function WalletForm() {
   const router = useRouter();
 
   const handleSubmit = async () => {
+    if (!acceptedTerms) {
+      alert("Please accept Terms & Conditions");
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -41,6 +52,7 @@ export default function WalletForm() {
             accountNumber,
             routingNumber,
             nickname,
+            accountType,
           }),
         }
       );
@@ -115,10 +127,80 @@ export default function WalletForm() {
         />
       </div>
 
+      <div>
+        <label className="text-gray-900 font-medium">
+          {labels?.accountTypeLabel}
+        </label>
+
+        <div className="flex gap-4 mt-2">
+          <label className="text-gray-900">
+            <input
+              type="radio"
+              value={labels?.accountType?.savingsAccountLabel}
+              checked={accountType === labels?.accountType?.savingsAccountLabel}
+              onChange={(e) => setAccountType(e.target.value)}
+              className="mr-2"
+            />
+            {labels?.accountType?.savingsAccountLabel}
+          </label>
+
+          <label className="text-gray-900">
+            <input
+              type="radio"
+              value={labels?.accountType?.currentAccountLabel}
+              checked={accountType === labels?.accountType?.currentAccountLabel}
+              onChange={(e) => setAccountType(e.target.value)}
+              className="mr-2"
+            />
+            {labels?.accountType?.currentAccountLabel}
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <label className="text-gray-900">
+          <input
+            type="checkbox"
+            checked={acceptedTerms}
+            onChange={() => setAcceptedTerms(!acceptedTerms)}
+            className="mr-2"
+          />
+          I accept{" "}
+          <button
+            type="button"
+            onClick={() => setShowModal(true)}
+            className="text-blue-600 underline"
+          >
+            {labels?.termsAndConditionsModal?.heading}
+          </button>
+        </label>
+      </div>
+
+      {showModal && (
+        <div className="fixed inset-0 bg-gray-50 bg-opacity-10 flex items-center justify-center">
+          <div className="bg-white p-6 rounded-lg w-96 space-y-4">
+            <h2 className="text-gray-900 text-lg font-bold">
+              {labels?.termsAndConditionsModal?.heading}
+            </h2>
+
+            <p className="text-gray-700 text-sm">
+              {labels?.termsAndConditionsModal?.body}
+            </p>
+
+            <button
+              onClick={() => setShowModal(false)}
+              className="bg-blue-600 text-white px-4 py-2 rounded w-20"
+            >
+              {labels?.termsAndConditionsModal?.closeButtonLabel}
+            </button>
+          </div>
+        </div>
+      )}
+
       <button
         onClick={handleSubmit}
-        className="bg-blue-600 text-white px-4 py-2 rounded-xl w-full"
-        disabled={loading}
+        className="bg-blue-600 text-white px-4 py-2 rounded-xl w-full disabled:bg-gray-400 disabled:cursor-not-allowed disabled:opacity-70"
+        disabled={loading || !acceptedTerms}
       >
         {labels?.submitButton}
       </button>

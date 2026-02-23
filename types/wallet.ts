@@ -4,6 +4,17 @@ export type WalletLabels = {
   accountLabel: string;
   routingLabel: string;
   nicknameLabel: string;
+  accountTypeLabel: string;
+  accountType: {
+    savingsAccountLabel: string;
+    currentAccountLabel: string;
+  };
+  termsAndConditionsCheckbox: boolean;
+  termsAndConditionsModal: {
+    heading: string;
+    body: string;
+    closeButtonLabel: string;
+  };
   submitButton: string;
 };
 
