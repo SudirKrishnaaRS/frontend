@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import ReCAPTCHA from "react-google-recaptcha";
+import { ToastContainer, toast } from "react-toastify";
 import Loader from "./Loader";
 import { useWalletStore } from "@/store/walletStore";
 import { useCMSContent } from "@/hooks/useCMSContent";
@@ -38,12 +39,34 @@ export default function WalletForm() {
 
   const handleSubmit = async () => {
     if (!captchaToken) {
-      alert("Please verify CAPTCHA");
+      toast.error("Please verify CAPTCHA", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        // transition: Bounce,
+      });
+      // alert("Please verify CAPTCHA");
       return;
     }
 
     if (!acceptedTerms) {
-      alert("Please accept Terms & Conditions");
+      toast.error("Please accept Terms & Conditions", {
+        position: "bottom-right",
+        autoClose: 5000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: "dark",
+        // transition: Bounce,
+      });
+      // alert("Please accept Terms & Conditions");
       return;
     }
 
@@ -94,6 +117,20 @@ export default function WalletForm() {
       <h1 className="text-xl font-bold text-gray-900">{labels?.title}</h1>
 
       <p className="text-gray-900">{labels?.body}</p>
+
+      <ToastContainer
+        position="bottom-right"
+        autoClose={5000}
+        hideProgressBar={false}
+        newestOnTop={false}
+        closeOnClick
+        rtl={false}
+        pauseOnFocusLoss
+        draggable
+        pauseOnHover
+        theme="dark"
+        // transition={Bounce}
+      />
 
       <div>
         <label htmlFor="accountNumber" className="text-gray-900 text-l">
