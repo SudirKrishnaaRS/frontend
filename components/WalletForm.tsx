@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
+import ReCAPTCHA from "react-google-recaptcha";
 import Loader from "./Loader";
 import { useWalletStore } from "@/store/walletStore";
 import { useCMSContent } from "@/hooks/useCMSContent";
@@ -22,6 +23,9 @@ export default function WalletForm() {
   const [acceptedTerms, setAcceptedTerms] = useState(
     labels?.termsAndConditionsCheckbox
   );
+
+  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+
   const [showModal, setShowModal] = useState(false);
 
   const [loading, setLoading] = useState(false);
@@ -33,6 +37,11 @@ export default function WalletForm() {
   const router = useRouter();
 
   const handleSubmit = async () => {
+    if (!captchaToken) {
+      alert("Please verify CAPTCHA");
+      return;
+    }
+
     if (!acceptedTerms) {
       alert("Please accept Terms & Conditions");
       return;
@@ -53,6 +62,7 @@ export default function WalletForm() {
             routingNumber,
             nickname,
             accountType,
+            captchaToken,
           }),
         }
       );
@@ -196,6 +206,13 @@ export default function WalletForm() {
           </div>
         </div>
       )}
+
+      <div>
+        <ReCAPTCHA
+          sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+          onChange={(token) => setCaptchaToken(token)}
+        />
+      </div>
 
       <button
         onClick={handleSubmit}
