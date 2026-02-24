@@ -1,18 +1,35 @@
 "use client";
+
+import LoginButton from "@/components/LoginButton";
 import { useRouter } from "next/navigation";
+import { useSession } from "next-auth/react";
 
 export default function Home() {
   const router = useRouter();
-  return (
-    <main className="flex items-center justify-center min-h-screen">
-      <h1 className="text-2xl font-bold">Digital Wallet POC</h1>
+  const { data: session } = useSession();
 
-      <button
-        className="bg-cyan-900 text-white px-4 py-2 rounded"
-        onClick={() => router.push("/wallet")}
-      >
-        Take me to the wallet
-      </button>
+  return (
+    <main className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="bg-white shadow-lg rounded-2xl p-10 w-105 text-center space-y-6">
+        <h1 className="text-3xl font-bold text-gray-900">Digital Wallet POC</h1>
+
+        <p className="text-gray-600">
+          Secure wallet management with OAuth login
+        </p>
+
+        {/* GitHub OAuth Login */}
+        <LoginButton />
+
+        {/* Show Wallet Button ONLY if logged in */}
+        {session && (
+          <button
+            className="bg-cyan-900 hover:bg-cyan-950 text-white px-4 py-3 rounded-xl w-full transition"
+            onClick={() => router.push("/wallet")}
+          >
+            Go to Wallet
+          </button>
+        )}
+      </div>
     </main>
   );
 }
