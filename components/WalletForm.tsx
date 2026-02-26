@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import { ToastContainer, toast } from "react-toastify";
 import Loader from "./Loader";
 import { useWalletStore } from "@/store/walletStore";
@@ -250,6 +250,8 @@ export default function WalletForm() {
         </div>
       )}
 
+      {/* Commented reCaptcha for now due to subdomain and primary domain testing */}
+      {/* Would need new Secrets as the localhost has been moved to subdomain url  */}
       {/* <div>
         <ReCAPTCHA
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
