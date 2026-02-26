@@ -73,12 +73,18 @@ export default function WalletForm() {
     setLoading(true);
 
     try {
+      // Fetch the Auth0 JWT access token from the server-side route
+      const tokenRes = await fetch("/api/auth/token");
+      if (!tokenRes.ok) throw new Error("Failed to retrieve access token");
+      const { token } = await tokenRes.json();
+
       const res = await fetch(
         `${process.env.NEXT_PUBLIC_API_BASE_URL}/api/wallet/save`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
+            "Authorization": `Bearer ${token}`,
           },
           body: JSON.stringify({
             accountNumber,
