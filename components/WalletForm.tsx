@@ -25,7 +25,7 @@ export default function WalletForm() {
     labels?.termsAndConditionsCheckbox
   );
 
-  const [captchaToken, setCaptchaToken] = useState<string | null>(null);
+  // const [captchaToken, setCaptchaToken] = useState<string | null>(null);
 
   const [showModal, setShowModal] = useState(false);
 
@@ -38,21 +38,21 @@ export default function WalletForm() {
   const router = useRouter();
 
   const handleSubmit = async () => {
-    if (!captchaToken) {
-      toast.error("Please verify CAPTCHA", {
-        position: "bottom-right",
-        autoClose: 5000,
-        hideProgressBar: false,
-        closeOnClick: true,
-        pauseOnHover: true,
-        draggable: true,
-        progress: undefined,
-        theme: "dark",
-        // transition: Bounce,
-      });
-      // alert("Please verify CAPTCHA");
-      return;
-    }
+    // if (!captchaToken) {
+    //   toast.error("Please verify CAPTCHA", {
+    //     position: "bottom-right",
+    //     autoClose: 5000,
+    //     hideProgressBar: false,
+    //     closeOnClick: true,
+    //     pauseOnHover: true,
+    //     draggable: true,
+    //     progress: undefined,
+    //     theme: "dark",
+    //     // transition: Bounce,
+    //   });
+    //   // alert("Please verify CAPTCHA");
+    //   return;
+    // }
 
     if (!acceptedTerms) {
       toast.error("Please accept Terms & Conditions", {
@@ -84,14 +84,14 @@ export default function WalletForm() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            "Authorization": `Bearer ${token}`,
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             accountNumber,
             routingNumber,
             nickname,
             accountType,
-            captchaToken,
+            // captchaToken,
           }),
         }
       );
@@ -250,12 +250,12 @@ export default function WalletForm() {
         </div>
       )}
 
-      <div>
+      {/* <div>
         <ReCAPTCHA
           sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
           onChange={(token) => setCaptchaToken(token)}
         />
-      </div>
+      </div> */}
 
       <button
         onClick={handleSubmit}
