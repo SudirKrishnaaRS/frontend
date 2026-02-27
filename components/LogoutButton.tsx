@@ -2,7 +2,7 @@
 
 export default function LogoutButton() {
   return (
-    <a href="/auth/logout" className="button logout">
+    <a href="/logout-all" className="button logout">
       Log Out
     </a>
   );
