@@ -2,7 +2,13 @@ import { NextResponse, type NextRequest } from "next/server";
 import { auth0 } from "./auth0";
 
 // Routes that require authentication
-const PROTECTED_ROUTES = ["/", "/wallet", "/success", "/error"];
+const PROTECTED_ROUTES = [
+  "/",
+  "/wallet",
+  "/ach-wallet-form",
+  "/success",
+  "/error",
+];
 
 function buildLoginUrl(
   request: NextRequest,
