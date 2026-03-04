@@ -56,7 +56,7 @@ export default function AchTextField({
         aria-describedby={hint || error ? messageId : undefined}
         aria-invalid={Boolean(error)}
         autoComplete={autoComplete}
-        className={`w-full rounded-[8px] border bg-white px-[14px] py-[10px] text-base leading-[1.4] text-[#161d25] shadow-[0_1px_2px_rgba(16,24,40,0.05)] placeholder:text-[#808080] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#152644]/20 ${
+        className={`w-full rounded-[8px] border bg-white px-[14px] py-[10px] text-base leading-[1.4] text-[#161d25] shadow-[0_1px_2px_rgba(16,24,40,0.05)] placeholder:text-[#808080] transition-colors duration-150 focus:outline-none focus:ring-2 focus:ring-[#152644]/20 lg:py-2 lg:text-sm ${
           error
             ? "border-[#b42318] focus:border-[#b42318]"
             : "border-[#cccccc] focus:border-[#152644]"

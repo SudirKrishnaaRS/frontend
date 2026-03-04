@@ -31,20 +31,23 @@ export default function AchToggleGroup({
 
       <div
         aria-label={label}
-        className="grid w-full grid-cols-2 gap-2 rounded-[8px]"
+        className="grid h-8 w-full grid-cols-2 overflow-hidden rounded-[8px] border border-[#9fa1a5] bg-[#f4f4f5]"
         id={id}
         role="radiogroup"
       >
         {options.map((option) => {
           const isSelected = option.value === value;
+          const isFirst = options[0]?.value === option.value;
 
           return (
             <button
               aria-checked={isSelected}
-              className={`h-10 rounded-[8px] border px-4 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#152644]/40 ${
+              className={`relative flex h-full items-center justify-center px-4 text-[14px] leading-none transition-colors duration-150 focus-visible:z-10 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#152644]/35 ${
+                isFirst ? "border-r border-[#9fa1a5]" : ""
+              } ${
                 isSelected
-                  ? "border-[#152644] bg-[#eff4fc] text-[#152644]"
-                  : "border-[#cccccc] bg-white text-[#4d4d4d] hover:bg-[#f8fafc]"
+                  ? "bg-[#ececef] font-semibold text-[#22385e]"
+                  : "bg-transparent font-medium text-[#22385e] hover:bg-[#ececef]"
               }`}
               key={option.value}
               onClick={() => onChange(option.value)}

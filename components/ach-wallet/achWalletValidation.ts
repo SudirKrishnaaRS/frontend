@@ -20,7 +20,7 @@ export function validateAchWalletForm(
   const errors: AchWalletFormErrors = {};
 
   if (!/^\d{9}$/.test(values.routingNumber)) {
-    errors.routingNumber = "Routing number must be exactly 9 digits.";
+    errors.routingNumber = "Enter a valid 9-digit bank routing number";
   }
 
   if (!/^\d{4,17}$/.test(values.accountNumber)) {

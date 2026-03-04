@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useWalletStore } from "@/store/walletStore";
 import AchActionButton from "./AchActionButton";
-import { CloseIcon, LandmarkIcon } from "./AchIcons";
+import { CloseIcon } from "./AchIcons";
 import AchTextField from "./AchTextField";
 import AchToggleGroup from "./AchToggleGroup";
 import CheckExampleCard from "./CheckExampleCard";
@@ -40,6 +40,7 @@ export default function ACHWalletForm() {
 
   const errors = useMemo(() => validateAchWalletForm(values), [values]);
 
+  // Can be replaced by react-hook-form later
   const visibleErrors: AchWalletFormErrors = useMemo(
     () =>
       Object.entries(errors).reduce<AchWalletFormErrors>(
@@ -145,21 +146,19 @@ export default function ACHWalletForm() {
   };
 
   return (
-    <section className="w-full max-w-[480px] border-t border-[#e5e5e5] bg-white p-6 shadow-[0_10px_15px_rgba(0,0,0,0.1),0_4px_6px_rgba(0,0,0,0.1)]">
-      <header className="relative flex min-h-14 items-start justify-between">
-        <div className="space-y-1 pr-10">
-          <h1 className="text-[18px] font-bold leading-[1.2] text-[#161d25]">
-            Select Payment Method
-          </h1>
-          <p className="text-xs leading-4 text-[#4d4d4d]">
-            Choose your preferred payment method, then add your payment details
-            below.
-          </p>
-        </div>
+    <section className="relative mx-auto w-full max-w-[760px] bg-white">
+      <header className="relative mb-4 px-10 pt-2 text-center lg:mb-5">
+        <h1 className="text-[18px] font-bold leading-[1.2] text-[#161d25]">
+          Select Payment Method
+        </h1>
+        <p className="mt-1 text-xs leading-4 text-[#4d4d4d]">
+          Choose your preferred payment method, then add your payment details
+          below.
+        </p>
 
         <button
           aria-label="Close ACH wallet form"
-          className="absolute right-0 top-0 rounded-[2px] p-1 text-[#161d25] transition-colors duration-150 hover:bg-[#f5f5f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#152644]/40"
+          className="absolute right-0 top-0 flex size-[26px] items-center justify-center rounded-[2px] text-[#161d25] transition-colors duration-150 hover:bg-[#f5f5f5] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#152644]/40"
           onClick={handleClose}
           type="button"
         >
@@ -167,31 +166,31 @@ export default function ACHWalletForm() {
         </button>
       </header>
 
-      <div className="mt-4 rounded-[6px] border border-[#e5e5e5] bg-white">
-        <div className="flex h-12 items-center bg-[rgba(159,219,237,0.25)] px-6 py-4">
+      <div className="rounded-[4px] border border-[#e5e5e5] bg-white">
+        <div className="flex min-h-12 items-center bg-[rgba(159,219,237,0.25)] px-4 py-3">
           <p className="text-sm font-semibold leading-[1.2] text-[#152644]">
             Payment method will be applied to Daniels Aviation
           </p>
         </div>
 
-        <div className="px-6 py-6">
-          <div className="mx-auto w-full max-w-[384px] space-y-8">
-            {/* Accoount Type */}
-            <AchToggleGroup
-              id="account-type"
-              label="Account Type*"
-              onChange={(nextValue) =>
-                setValues((prev) => ({ ...prev, accountType: nextValue }))
-              }
-              options={[
-                { label: "Checking", value: "checking" },
-                { label: "Savings", value: "savings" },
-              ]}
-              value={values.accountType}
-            />
+        <div className="px-4 py-4">
+          <div className="space-y-5">
+            <div className="w-full md:max-w-[224px]">
+              <AchToggleGroup
+                id="account-type"
+                label="Account Type*"
+                onChange={(nextValue) =>
+                  setValues((prev) => ({ ...prev, accountType: nextValue }))
+                }
+                options={[
+                  { label: "Checking", value: "checking" },
+                  { label: "Savings", value: "savings" },
+                ]}
+                value={values.accountType}
+              />
+            </div>
 
-            {/* Routing Number */}
-            <div className="space-y-4">
+            <div className="grid grid-cols-1 gap-3 lg:grid-cols-3">
               <AchTextField
                 error={visibleErrors.routingNumber}
                 hint="E.g. 012200345"
@@ -211,7 +210,6 @@ export default function ACHWalletForm() {
                 value={values.routingNumber}
               />
 
-              {/* Account Number*/}
               <AchTextField
                 error={visibleErrors.accountNumber}
                 hint="E.g. 12345678"
@@ -231,7 +229,6 @@ export default function ACHWalletForm() {
                 value={values.accountNumber}
               />
 
-              {/* Confirm Account Number*/}
               <AchTextField
                 error={visibleErrors.confirmAccountNumber}
                 hint="E.g. 12345678"
@@ -251,7 +248,6 @@ export default function ACHWalletForm() {
                 value={values.confirmAccountNumber}
               />
 
-              {/* Account Nickname */}
               <AchTextField
                 error={visibleErrors.accountNickname}
                 id="accountNickname"
@@ -279,10 +275,10 @@ export default function ACHWalletForm() {
         <p className="mt-3 text-sm leading-[1.2] text-[#b42318]">{apiError}</p>
       ) : null}
 
-      <footer className="mt-4 flex flex-col gap-4">
+      <footer className="mt-3 flex flex-col gap-3 lg:flex-row lg:justify-end">
         <AchActionButton
+          className="lg:w-[225px]"
           disabled={isSubmitting || !isFormValid}
-          // leadingIcon={<LandmarkIcon className="size-6" />}
           onClick={handleSubmit}
           type="button"
           variant="primary"
@@ -291,6 +287,7 @@ export default function ACHWalletForm() {
         </AchActionButton>
 
         <AchActionButton
+          className="lg:w-[179px]"
           onClick={handleCancel}
           type="button"
           variant="secondary"

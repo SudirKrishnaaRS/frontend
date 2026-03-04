@@ -17,7 +17,7 @@ export default function AchActionButton({
 
   const variantClassName =
     variant === "primary"
-      ? "h-12 rounded-[30px] border-[#152644] bg-[#152644] px-4 py-2 text-[18px] leading-[1.2] text-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] disabled:border-[#cccccc] disabled:bg-[#e6e6e6] disabled:text-[#808080]"
+      ? "h-12 rounded-[30px] border-[#152644] bg-[#152644] px-4 py-2 text-[18px] leading-[1.2] text-white shadow-[0_1px_2px_rgba(16,24,40,0.05)] disabled:border-[#cccccc] disabled:bg-[#e6e6e6] disabled:text-[#808080] lg:h-9 lg:px-3 lg:py-2 lg:text-sm"
       : "h-9 rounded-[30px] border-[#a6a6a6] bg-white px-3 py-2 text-sm leading-[1.2] text-[#161d25] shadow-[0_1px_2px_rgba(16,24,40,0.05)] hover:bg-[#f8fafc]";
 
   return (
