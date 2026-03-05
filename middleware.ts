@@ -5,6 +5,7 @@ import { auth0 } from "./auth0";
 const PROTECTED_ROUTES = [
   "/",
   "/wallet",
+  "/wallet-trpc",
   "/ach-wallet-form",
   "/success",
   "/error",

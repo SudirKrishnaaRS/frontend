@@ -3,6 +3,7 @@
 import { SessionProvider } from "next-auth/react";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
+import { TrpcProvider } from "./TrpcProvider"; // Import our new tRPC Provider setup
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -29,7 +30,12 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <SessionProvider>{children}</SessionProvider>
+        {/* We wrap the entire app in our TrpcProvider so all components can make tRPC calls */}
+        <SessionProvider>
+          <TrpcProvider>
+            {children}
+          </TrpcProvider>
+        </SessionProvider>
       </body>
     </html>
   );
